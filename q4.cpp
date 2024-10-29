@@ -7,14 +7,18 @@ using namespace std;
 class Month {
 public:
     int month;
-
+    //Default Constructor
     Month() {
         month = 1;
     }
+    //a constructor to set month base on month number
     Month(int monthNumber) {
         month = monthNumber;
     }
+    //constructor to set month based on first 3 chars of the month name
     Month (char c1, char c2, char c3) {
+
+
         if ((c1 == 'j') && (c2 == 'a') && (c3 == 'n')) {
             month = 1;
         }
@@ -52,6 +56,7 @@ public:
             month = 12;
         }
     }
+    //Input of month Number
     void input () {
         cout << endl << "Month number :";
         cin >> month;
@@ -60,17 +65,35 @@ public:
             cin >> month;
         }
     }
-    void inputMonthLetter(istream& in) {
-        char letter[4];
+    //Input of Month first three letters
+    void inputMonthName(istream& in) {
+        char monthName[4];
         cout << endl << "Enter the first three letters of the month:";
-        in >> letter;
-        Month (letter[0], letter[1], letter[2]);
-        
+        in >> monthName;
+        setMonthByName(monthName);
+
+
     }
+    //Function to set month to letter names
+    void setMonthByName(const char* monthName) {
+        const char* monthNames[] = {"jan", "feb", "mar", "apr", "may", "jun",
+                                    "jul", "aug", "sep", "oct", "nov", "dec"};
+        for (int i = 0; i < 12; ++i) {
+            if (tolower(monthName[0]) == monthNames[i][0] &&
+                tolower(monthName[1]) == monthNames[i][1] &&
+                tolower(monthName[2]) == monthNames[i][2]) {
+                month = i + 1; // Set month number
+                return;
+                }
+        }
+        cerr << "Invalid month name. Setting to January." << endl;
+        month = 1; // Default to January if invalid
+    }
+    //Return Month value
     int getMonth () {
         return month;
     }
-
+    //Outputs month name
     void outputMonthName(ostream& out) {
         const char* monthNames[] = {"The month is January", "The month is February",
             "The month is March", "The month is April", "The month is May",
@@ -78,26 +101,29 @@ public:
             "The month is October", "The month is November", "The month is December"};
         out << monthNames[month - 1];
     }
-
+    //Calculates next month value
     Month nextMonth () {
         int m = ((month % 12 ) +1);
         return Month (m);
     }
 };
 
-int main () {
-    Month m1, m3;
 
+int main () {
+    //Object Class defined
+    Month m1, m3;
+    //Input month via number and output it
     m1.input();
     m1.outputMonthName(cout);
-
+    //Calculates next month and outputs it
     m3=m1.nextMonth();
     cout << endl << "The next month is:" << m3.getMonth();
-
+    //Secondary Object Class defined
     Month m2, m4;
-    m2.inputMonthLetter(cin);
+    //Input month via first three letters and output it
+    m2.inputMonthName(cin);
     m2.outputMonthName(cout);
-
+    //Calculates next month and outputs it
     m4 = m2.nextMonth();
     cout << endl << "The next month is:" << m4.getMonth();
     return 0;
